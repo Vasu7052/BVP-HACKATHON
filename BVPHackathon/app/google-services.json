@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "423718859909",
+    "firebase_url": "https://bvp-hackathon.firebaseio.com",
+    "project_id": "bvp-hackathon",
+    "storage_bucket": "bvp-hackathon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:423718859909:android:3609634f08b36dc5",
+        "android_client_info": {
+          "package_name": "com.example.vasupc.bvp_hackathon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "423718859909-o9tvmuo7o7q7i4chdra2fepmrq9ojrk5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.vasupc.bvp_hackathon",
+            "certificate_hash": "aec34c96c044b17f978e9fea584e278d4ffcf9d7"
+          }
+        },
+        {
+          "client_id": "423718859909-1l9muhjhlatcu0ka1htorr5g4a93fsbc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBchJjPgvkLWhGEgs2cVDtdCe8h_AA0SF4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "423718859909-1l9muhjhlatcu0ka1htorr5g4a93fsbc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
