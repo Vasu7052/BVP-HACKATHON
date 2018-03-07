@@ -24,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference ref;
 
-    SharedPreferences sharedPreferencesMyInfo;
+    SharedPreferences sharedPreferencesMyInfo;  
     SharedPreferences.Editor editorMyInfo ;
 
     @Override
