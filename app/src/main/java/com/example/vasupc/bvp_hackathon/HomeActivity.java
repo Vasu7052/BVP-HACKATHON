@@ -11,13 +11,21 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class HomeActivity extends Activity implements LocationListener {
     private LocationManager locationManager;
@@ -33,6 +41,12 @@ public class HomeActivity extends Activity implements LocationListener {
 
     SharedPreferences sharedPreferencesLoginStatus ;
     SharedPreferences.Editor editorLoginStatus ;
+
+    Double myLat,myLng ;
+
+    ArrayList<String> nearbyList = new ArrayList<>();
+
+    ListView lvNearby ;
 
     /** Called when the activity is first created. */
     @Override
@@ -50,6 +64,7 @@ public class HomeActivity extends Activity implements LocationListener {
         ref = FirebaseDatabase.getInstance().getReference();
 
         btnLogout = findViewById(R.id.btnLogout);
+        lvNearby = findViewById(R.id.lvNearby);
 
         // Get the location manager
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -115,14 +130,16 @@ public class HomeActivity extends Activity implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        Double lat = location.getLatitude();
-        Double lng = location.getLongitude();
-        Toast.makeText(this, ""+lat, Toast.LENGTH_SHORT).show();
+        myLat = location.getLatitude();
+        myLng = location.getLongitude();
+        Toast.makeText(this, ""+myLat, Toast.LENGTH_SHORT).show();
 
         email = email.substring(0,email.indexOf("@"));
 
-        ref.child("UserLocation").child(email).child("lat").setValue(lat);
-        ref.child("UserLocation").child(email).child("lng").setValue(lng);
+        ref.child("UserLocation").child(email).child("lat").setValue(myLat);
+        ref.child("UserLocation").child(email).child("lng").setValue(myLng);
+
+        get_all_people();
 
     }
 
@@ -144,4 +161,39 @@ public class HomeActivity extends Activity implements LocationListener {
         Toast.makeText(this, "Disabled provider " + provider,
                 Toast.LENGTH_SHORT).show();
     }
+
+    public void get_all_people(){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("UserLocation");
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                nearbyList.clear();
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    float[] dist = new float[2];
+
+                    double lat = (Double) ds.child("lat").getValue();
+                    double lng = (Double) ds.child("lng").getValue();
+
+                    Location.distanceBetween(myLat,myLng,lat,lng,dist);
+
+                    if (dist[0] < 1000){
+                        nearbyList.add(ds.getKey());
+                    }
+                }
+
+                ArrayAdapter adapter = new ArrayAdapter(HomeActivity.this, android.R.layout.simple_list_item_1, nearbyList);
+                lvNearby.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
 }
