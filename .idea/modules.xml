@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BVP-HACKATHON.iml" filepath="$PROJECT_DIR$/BVP-HACKATHON.iml" />
+      <module fileurl="file://D:\BVP-Hackathon\BVPHackathon\BVP-HACKATHON.iml" filepath="D:\BVP-Hackathon\BVPHackathon\BVP-HACKATHON.iml" />
       <module fileurl="file://$PROJECT_DIR$/BVPHackathon.iml" filepath="$PROJECT_DIR$/BVPHackathon.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

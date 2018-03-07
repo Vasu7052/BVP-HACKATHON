@@ -36,6 +36,34 @@
                 android:hint="Name"
                 android:id="@+id/signup_name"/>
 
+            <RadioGroup
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageView"
+                android:id="@+id/radioGroup"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="25sp"
+                    android:text="Male"
+                    android:id="@+id/radioButton"
+                    android:checked="false"
+                    android:textSize="18sp"
+                    android:layout_marginRight="15sp"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="25sp"
+                    android:text="Female"
+                    android:id="@+id/radioButton2"
+                    android:checked="true"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="15sp"/>
+            </RadioGroup>
+
+
 
             <EditText
                 android:id="@+id/signup_email"
