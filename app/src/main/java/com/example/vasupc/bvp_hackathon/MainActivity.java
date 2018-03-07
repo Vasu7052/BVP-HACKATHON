@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferencesLoginStatus = this.getSharedPreferences("LoginStatus" , MODE_PRIVATE);
 
         if(sharedPreferencesLoginStatus.getBoolean("Login" , false)){
+            Toast.makeText(this, "Already Login", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(MainActivity.this , HomeActivity.class));
             finish();
         }
