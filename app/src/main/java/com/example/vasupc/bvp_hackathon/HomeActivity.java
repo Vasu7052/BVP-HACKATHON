@@ -22,30 +22,39 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class HomeActivity extends AppCompatActivity implements LocationListener {
 
-    private TextView latitudePosition;
-    private TextView longitudePosition;
-    private TextView currentCity;
     private LocationManager locationManager;
     private Location location;
     private final int REQUEST_LOCATION = 200;
     private static final String TAG = "MainActivity";
+    ListView lvNearby ;
+    ArrayList<String> nearbyList = new ArrayList<>();
+    Double myLat = 0.0 , myLng = 0.0 ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        latitudePosition = (TextView) findViewById(R.id.latitude);
-        longitudePosition = (TextView) findViewById(R.id.longitude);
-        currentCity = (TextView) findViewById(R.id.city);
+
+        lvNearby =  findViewById(R.id.lvNearby);
+
         locationManager = (LocationManager) getSystemService(Service.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(HomeActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
@@ -57,8 +66,8 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         }
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             if (location != null) {
-                latitudePosition.setText(String.valueOf(location.getLatitude()));
-                longitudePosition.setText(String.valueOf(location.getLongitude()));
+                //latitudePosition.setText(String.valueOf(location.getLatitude()));
+                //longitudePosition.setText(String.valueOf(location.getLongitude()));
                 getAddressFromLocation(location, getApplicationContext(), new GeoCoderHandler());
             }
         } else {
@@ -67,8 +76,14 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     }
     @Override
     public void onLocationChanged(Location location) {
-        latitudePosition.setText(String.valueOf(location.getLatitude()));
-        longitudePosition.setText(String.valueOf(location.getLongitude()));
+
+        Toast.makeText(this, "Location Changed", Toast.LENGTH_SHORT).show();
+
+        myLat = location.getLatitude();
+        myLng = location.getLongitude();
+
+        get_all_people();
+
         getAddressFromLocation(location, getApplicationContext(), new GeoCoderHandler());
     }
     @Override
@@ -151,7 +166,44 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                 default:
                     result = null;
             }
-            currentCity.setText(result);
+            //currentCity.setText(result);
         }
     }
+
+    public void get_all_people(){
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("UserLocation");
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                nearbyList.clear();
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    float[] dist = new float[2];
+
+                    double lat = (Double) ds.child("lat").getValue();
+                    double lng = (Double) ds.child("lng").getValue();
+
+                    Location.distanceBetween(myLat,myLng,lat,lng,dist);
+
+                    if (dist[0] < 1000){
+                        nearbyList.add(ds.getKey());
+                    }
+                }
+
+                ArrayAdapter adapter = new ArrayAdapter(HomeActivity.this, android.R.layout.simple_list_item_1, nearbyList);
+                lvNearby.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+
 }
