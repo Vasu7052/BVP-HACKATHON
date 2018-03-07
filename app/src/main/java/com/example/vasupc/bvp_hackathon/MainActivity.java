@@ -1,6 +1,7 @@
 package com.example.vasupc.bvp_hackathon;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,10 +14,19 @@ public class MainActivity extends AppCompatActivity {
 
     Button btnLogin , btnSignup;
 
+    SharedPreferences sharedPreferencesLoginStatus ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sharedPreferencesLoginStatus = this.getSharedPreferences("LoginStatus" , MODE_PRIVATE);
+
+        if(sharedPreferencesLoginStatus.getBoolean("Login" , false)){
+            startActivity(new Intent(MainActivity.this , HomeActivity.class));
+            finish();
+        }
 
         btnLogin = findViewById(R.id.btnLogin);
         btnSignup = findViewById(R.id.btnSignup);

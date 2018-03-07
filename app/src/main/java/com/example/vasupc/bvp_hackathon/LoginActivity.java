@@ -24,8 +24,11 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference ref;
 
-    SharedPreferences sharedPreferencesMyInfo;  
+    SharedPreferences sharedPreferencesMyInfo;
     SharedPreferences.Editor editorMyInfo ;
+
+    SharedPreferences sharedPreferencesLoginStatus ;
+    SharedPreferences.Editor editorLoginStatus ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,9 @@ public class LoginActivity extends AppCompatActivity {
 
         sharedPreferencesMyInfo = this.getSharedPreferences("MyInfo" , MODE_PRIVATE);
         editorMyInfo = sharedPreferencesMyInfo.edit();
+
+        sharedPreferencesLoginStatus = this.getSharedPreferences("LoginStatus" , MODE_PRIVATE);
+        editorLoginStatus = sharedPreferencesLoginStatus.edit();
 
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
@@ -107,6 +113,9 @@ public class LoginActivity extends AppCompatActivity {
                     editorMyInfo.commit();
 
                     Toast.makeText(LoginActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
+
+                    editorLoginStatus.putBoolean("Login" , true);
+                    editorLoginStatus.commit();
 
                     startActivity(new Intent(LoginActivity.this , HomeActivity.class));
                     finish();
