@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "423718859909-00jgroe2n0c1oo5adgkd5gaog04ds32g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.vasupc.bvp_hackathon",
+            "certificate_hash": "997d44d4f08410a8c55c813e1550d673d3f6c108"
+          }
+        },
+        {
           "client_id": "423718859909-o9tvmuo7o7q7i4chdra2fepmrq9ojrk5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
