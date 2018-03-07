@@ -7,6 +7,7 @@ package com.example.vasupc.bvp_hackathon.Model;
 public class User {
 
     private String name ;
+    private String gender ;
     private String email ;
     private String password ;
     private Family family;
@@ -15,8 +16,9 @@ public class User {
 
     }
 
-    public User(String name,String email,String password,Family family){
+    public User(String name,String gender,String email,String password,Family family){
         this.name = name;
+        this.gender = gender;
         this.email = email;
         this.password = password;
         this.family = family ;
@@ -28,6 +30,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getEmail() {

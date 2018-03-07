@@ -55,14 +55,23 @@ public class LoginActivity extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                boolean found = false ;
+
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String email = (String) ds.child("name").getValue();
+                    String email = (String) ds.child("email").getValue();
                     String password = (String) ds.child("password").getValue();
 
                     if (email.equalsIgnoreCase(etEmail.getText().toString()) && password.equals(etPassword.getText().toString())){
-                        getUserDetails("sdvdsvdsv");
+                        Toast.makeText(LoginActivity.this, "Verified", Toast.LENGTH_SHORT).show();
+                        found = true ;
+                        getUserDetails(ds.getKey());
                         break;
                     }
+                }
+
+                if(!found){
+                    Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
                 }
             }
 
