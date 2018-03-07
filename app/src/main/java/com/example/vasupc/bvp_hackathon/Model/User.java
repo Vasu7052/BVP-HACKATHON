@@ -9,11 +9,17 @@ public class User {
     private String name ;
     private String email ;
     private String password ;
+    private Family family;
 
-    public User(String name,String email,String password){
+    public User(){
+
+    }
+
+    public User(String name,String email,String password,Family family){
         this.name = name;
         this.email = email;
-        this.email = email;
+        this.password = password;
+        this.family = family ;
     }
 
     public String getName() {
@@ -38,6 +44,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Family getFamily() {
+        return family;
+    }
+
+    public void setFamily(Family family) {
+        this.family = family;
     }
 
 }

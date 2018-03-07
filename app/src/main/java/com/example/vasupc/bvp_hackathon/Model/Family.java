@@ -11,6 +11,10 @@ public class Family {
     private String member2name ;
     private String member2number ;
 
+    public Family(){
+
+    }
+
     public Family(String member1name,String member1number,String member2name, String member2number){
         this.member1name = member1name;
         this.member1number = member1number;
