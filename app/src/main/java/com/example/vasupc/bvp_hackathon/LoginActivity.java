@@ -27,6 +27,9 @@ public class LoginActivity extends AppCompatActivity {
     SharedPreferences sharedPreferencesMyInfo;
     SharedPreferences.Editor editorMyInfo ;
 
+    SharedPreferences sharedPreferencesLoginStatus ;
+    SharedPreferences.Editor editorLoginStatus ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +40,9 @@ public class LoginActivity extends AppCompatActivity {
 
         sharedPreferencesMyInfo = this.getSharedPreferences("MyInfo" , MODE_PRIVATE);
         editorMyInfo = sharedPreferencesMyInfo.edit();
+
+        sharedPreferencesLoginStatus = this.getSharedPreferences("LoginStatus" , MODE_PRIVATE);
+        editorLoginStatus = sharedPreferencesLoginStatus.edit();
 
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
@@ -63,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                     String password = (String) ds.child("password").getValue();
 
                     if (email.equalsIgnoreCase(etEmail.getText().toString()) && password.equals(etPassword.getText().toString())){
-                        Toast.makeText(LoginActivity.this, "Verified", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(LoginActivity.this, "Verified", Toast.LENGTH_SHORT).show();
                         found = true ;
                         getUserDetails(ds.getKey());
                         break;
@@ -84,19 +90,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void getUserDetails(String userid){
-        FirebaseDatabase getDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference getRef = getDatabase.getReference("Users").child(userid);
+
+        DatabaseReference getRef = FirebaseDatabase.getInstance().getReference("Users").child(userid);
 
         getRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String email = (String) ds.child("name").getValue();
-                    String name = (String) ds.child("email").getValue();
-                    String member1name = (String) ds.child("Family").child("member1name").getValue();
-                    String member1number = (String) ds.child("Family").child("member1number").getValue();
-                    String member2name = (String) ds.child("Family").child("member2name").getValue();
-                    String member2number = (String) ds.child("Family").child("member2number").getValue();
+                    String name = (String) dataSnapshot.child("name").getValue();
+                    String email = (String) dataSnapshot.child("email").getValue();
+                    String member1name = (String) dataSnapshot.child("family").child("member1name").getValue();
+                    String member1number = (String) dataSnapshot.child("family").child("member1number").getValue();
+                    String member2name = (String) dataSnapshot.child("family").child("member2name").getValue();
+                    String member2number = (String) dataSnapshot.child("family").child("member2number").getValue();
 
                     editorMyInfo.putString("Email" , email);
                     editorMyInfo.putString("Name" , name);
@@ -108,11 +113,11 @@ public class LoginActivity extends AppCompatActivity {
 
                     Toast.makeText(LoginActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
 
+                    editorLoginStatus.putBoolean("Login" , true);
+                    editorLoginStatus.commit();
+
                     startActivity(new Intent(LoginActivity.this , HomeActivity.class));
                     finish();
-
-                    break;
-                }
             }
 
             @Override
