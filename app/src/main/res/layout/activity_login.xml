@@ -4,20 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.vasupc.bvp_hackathon.MainActivity"
+    tools:context="com.example.vasupc.bvp_hackathon.LoginActivity"
     android:gravity="center_vertical|center_horizontal"
     android:orientation="vertical">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:id="@+id/etEmail"
+        android:layout_margin="20sp"
+        android:hint="Email"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:id="@+id/etPassword"
+        android:layout_margin="20sp"
+        android:hint="Password"/>
 
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="LOGIN"/>
-
-    <Button
-        android:id="@+id/btnSignup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Signup"/>
 
 </LinearLayout>
