@@ -8,6 +8,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Criteria;
@@ -48,12 +49,32 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     ArrayList<String> nearbyList = new ArrayList<>();
     Double myLat = 0.0 , myLng = 0.0 ;
 
+    SharedPreferences sharedPreferencesMyInfo;
+
+    String email  = "";
+
+    SharedPreferences sharedPreferencesLoginStatus ;
+    SharedPreferences.Editor editorLoginStatus ;
+
+    DatabaseReference ref ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        ref = FirebaseDatabase.getInstance().getReference();
+
         lvNearby =  findViewById(R.id.lvNearby);
+
+        sharedPreferencesMyInfo = this.getSharedPreferences("MyInfo" , MODE_PRIVATE);
+
+        sharedPreferencesLoginStatus = this.getSharedPreferences("LoginStatus" , MODE_PRIVATE);
+        editorLoginStatus = sharedPreferencesLoginStatus.edit();
+
+        email = sharedPreferencesMyInfo.getString("Email" , "");
+
+        email = email.substring(0,email.indexOf("@"));
 
         locationManager = (LocationManager) getSystemService(Service.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -81,6 +102,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
         myLat = location.getLatitude();
         myLng = location.getLongitude();
+
+        ref.child("UserLocation").child(email).child("lat").setValue(myLat);
+        ref.child("UserLocation").child(email).child("lng").setValue(myLng);
 
         get_all_people();
 
@@ -172,22 +196,23 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
     public void get_all_people(){
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("UserLocation");
-
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.child("UserLocation").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 nearbyList.clear();
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     float[] dist = new float[2];
-
+                    Log.i("HOME" , ds.getKey());
                     double lat = (Double) ds.child("lat").getValue();
                     double lng = (Double) ds.child("lng").getValue();
 
                     Location.distanceBetween(myLat,myLng,lat,lng,dist);
 
                     if (dist[0] < 1000){
-                        nearbyList.add(ds.getKey());
+                        if (email != (String)ds.getKey()){
+                            nearbyList.add(ds.getKey());
+                        }
+
                     }
                 }
 
