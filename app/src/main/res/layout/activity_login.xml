@@ -20,7 +20,8 @@
         android:layout_height="50sp"
         android:id="@+id/etPassword"
         android:layout_margin="20sp"
-        android:hint="Password"/>
+        android:hint="Password"
+        android:inputType="textPassword"/>
 
     <Button
         android:id="@+id/btnLogin"
